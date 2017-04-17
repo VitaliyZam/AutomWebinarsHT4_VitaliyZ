@@ -74,7 +74,7 @@ public abstract class BaseTest {
      * creates {@link ChromeDriver} instance by default.
      */
     @BeforeClass
-    @Parameters("browser")
+    @Parameters("browserFF")
     // TODO use parameters from pom.xml to pass required browser type
     public void setUp(String browser) {
         driver = new EventFiringWebDriver(getDriver(browser));
