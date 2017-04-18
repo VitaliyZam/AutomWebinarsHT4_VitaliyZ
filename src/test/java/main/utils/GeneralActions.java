@@ -91,6 +91,11 @@ public class GeneralActions {
             if (i != 0) updatedPaginator.get(i).click();
             waitForContentLoad();
             waitForPageLoad();
+            
+            //New commit: fix StaleElementReferenceException
+            explicitWait().until(jQueryAJAXCallsAreCompleted());
+            //---
+            
             List<WebElement> articles = new ArrayList<>(explicitWait().until(ExpectedConditions.
                     visibilityOfAllElementsLocatedBy(By.xpath("//div/h1/a"))));
             int j = 0;
@@ -119,6 +124,15 @@ public class GeneralActions {
     public void waitForContentLoad() {
         // TODO implement generic method to wait until page content is loaded
         explicitWait().until(ExpectedConditions.invisibilityOfElementLocated(By.id("ajax_running")));
+    }
+    
+    public ExpectedCondition<Boolean> jQueryAJAXCallsAreCompleted() {
+        return new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver driver) {
+                return (Boolean) ((JavascriptExecutor) driver).executeScript("return (window.jQuery != null) && (jQuery.active === 0);");
+            }
+        };
     }
 
     public void mouseOver(WebElement element) {
